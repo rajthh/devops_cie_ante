@@ -40,16 +40,3 @@ Whether you're new to DevOps or seeking to refine your skills, this lab manual h
 4. **Streamlined Content**: All notes, references and  exercises are structured to align with UG-level coursework.
 
 ---
-
-## **Why DevOps?**
-
-DevOps is not just a buzzword—it’s a **must-have skill** in today’s automation driver tech-world. By adopting DevOps practices, you’ll:
-- Bridge the gap between development and operations teams.
-- Enhance your ability to deliver high-quality software faster.
-- Prepare for exciting career opportunities in the ever-evolving tech landscape.
-
----
-
-## **Get Started Today!**
-
-Start exploring and leveling up your DevOps skills with this repository. Let’s make learning **DevOps intuitive, fun and impactful**!
