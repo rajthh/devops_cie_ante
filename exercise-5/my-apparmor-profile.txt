@@ -1,0 +1,29 @@
+#include <tunables/global>
+
+profile my-apparmor-profile flags=(attach_disconnected,mediate_deleted) {
+    #include <abstractions/base>
+
+    # Deny access to sensitive directories
+    deny /etc/** r,
+    deny /var/** rw,
+
+    # Allow network communication
+    network inet stream,
+
+    # Allow access to the application directory
+    /app/** rwk,
+
+    # Allow the Python runtime
+    /usr/local/bin/python rix,
+    /usr/local/bin/python3 rix,
+    /usr/local/bin/python3.11 rix,
+    /usr/local/lib/python3.11/** r,
+
+    # Deny execution of system binaries
+    deny /bin/** rmix,
+    deny /usr/bin/** rmix,
+
+    # Restrict capabilities
+    capability net_bind_service,
+    deny capability sys_admin,
+}
