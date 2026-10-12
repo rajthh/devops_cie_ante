@@ -1,0 +1,43 @@
+pipeline {
+    agent any
+
+    stages {
+
+        stage('Pre-check Docker') {
+            steps {
+                sh 'docker --version'
+                sh 'docker info'
+            }
+        }
+
+        stage('Verify Monitoring Files') {
+            steps {
+                sh 'ls -l'
+                sh 'test -f delivery_metrics.py'
+                sh 'test -f prometheus.yml'
+                sh 'test -f alert_rules.yml'
+            }
+        }
+
+        stage('Check Monitoring Containers') {
+            steps {
+                sh 'docker ps'
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                sh 'docker build -t delivery_metrics .'
+            }
+        }
+    }
+
+    post {
+        success {
+            echo 'Exercise 6 pipeline completed successfully!'
+        }
+        failure {
+            echo 'Pipeline failed. Check the console output.'
+        }
+    }
+}
