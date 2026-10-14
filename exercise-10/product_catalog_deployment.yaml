@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: product-catalog
+  namespace: default
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: product-catalog
+  template:
+    metadata:
+      labels:
+        app: product-catalog
+    spec:
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchLabels:
+                app: product-catalog
+            topologyKey: "kubernetes.io/hostname"
+      containers:
+      - name: product-catalog-container
+        image: product-catalog:latest
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 80
