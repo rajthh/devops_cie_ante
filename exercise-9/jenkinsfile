@@ -6,51 +6,56 @@ pipeline {
         stage('Build') {
             steps {
                 echo 'Creating virtual environment and installing dependencies...'
-                sh '''
-                    python3 -m venv venv
-                    ./venv/bin/pip install --upgrade pip
-                    ./venv/bin/pip install -r requirements.txt
-                '''
+                dir('exercise-9') {
+                    sh '''
+                        python3 -m venv venv
+                        ./venv/bin/pip install --upgrade pip
+                        ./venv/bin/pip install -r requirements.txt
+                    '''
+                }
             }
         }
 
         stage('Test') {
             steps {
                 echo 'Running tests...'
-                sh '''
-                    ./venv/bin/python -m unittest discover -s .
-                '''
+                dir('exercise-9') {
+                    sh './venv/bin/python -m unittest discover -s .'
+                }
             }
         }
 
         stage('Deploy') {
             steps {
                 echo 'Deploying application...'
-                sh '''
-                    mkdir -p ${WORKSPACE}/python-app-deploy
-                    cp ${WORKSPACE}/app.py ${WORKSPACE}/python-app-deploy/
-                '''
+                dir('exercise-9') {
+                    sh '''
+                        mkdir -p python-app-deploy
+                        cp app.py python-app-deploy/
+                    '''
+                }
             }
         }
 
         stage('Run Application') {
             steps {
                 echo 'Running application...'
-                sh '''
-                    nohup ${WORKSPACE}/venv/bin/python \
-                    ${WORKSPACE}/python-app-deploy/app.py \
-                    > ${WORKSPACE}/python-app-deploy/app.log 2>&1 &
-                    echo $! > ${WORKSPACE}/python-app-deploy/app.pid
-                '''
+                dir('exercise-9') {
+                    sh '''
+                        nohup ./venv/bin/python python-app-deploy/app.py \
+                        > python-app-deploy/app.log 2>&1 &
+                        echo $! > python-app-deploy/app.pid
+                    '''
+                }
             }
         }
 
         stage('Test Application') {
             steps {
-                echo 'Testing application...'
-                sh '''
-                    ${WORKSPACE}/venv/bin/python ${WORKSPACE}/test_app.py
-                '''
+                echo 'Testing deployed application...'
+                dir('exercise-9') {
+                    sh './venv/bin/python test_app.py'
+                }
             }
         }
     }
